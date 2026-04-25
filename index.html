@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#080A0F;color:#fff;font-family:'Courier New',monospace;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+
+#sw{background:#0D0F18;border-bottom:1px solid #1A1D27;padding:7px 16px;display:flex;gap:5px;align-items:center;flex-wrap:wrap;flex-shrink:0}
+#sw span{color:#333;font-size:11px;margin-right:4px}
+.sb{background:#1A1D27;color:#555;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;font-weight:700;font-size:11px;font-family:'Courier New',monospace}
+.sb.on{background:#F7A84F;color:#000}
+
+#hdr{display:flex;justify-content:space-between;align-items:center;padding:18px 32px 12px;flex-shrink:0;border-bottom:1px solid #0F1118}
+#stitle{color:#F7A84F;font-size:44px;font-weight:900;letter-spacing:4px;line-height:1}
+#ssub{color:#1A1D2A;font-size:12px;margin-top:4px;letter-spacing:3px}
+#clock{color:#fff;font-size:56px;font-weight:900;text-align:right;line-height:1}
+#xdate{color:#2A2D3A;font-size:12px;margin-top:3px;text-align:right}
+
+#grid{flex:1;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 20px;align-content:start}
+
+/* ── ACTIVE cards ── */
+.card{border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden}
+.card.urg{background:#130A0A;border:2px solid #FF444466}
+.card.nrm{background:#0F1118;border:1px solid #1A1D27}
+.card.nrm.top{background:#131720;border:1px solid #F7A84F22}
+.ac{position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:12px 0 0 12px}
+.cn{font-size:22px;color:#1A1D27;font-weight:900;min-width:30px;text-align:center}
+.cb{flex:1;min-width:0}
+.bu{background:#FF444422;color:#FF4444;border:1px solid #FF444455;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:900;display:inline-block;margin-bottom:3px;letter-spacing:1px}
+.ci{color:#F7A84F;font-size:18px;font-weight:900;line-height:1}
+.cm{color:#fff;font-size:15px;font-weight:700;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cs{color:#2A2D3A;font-size:11px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cd{text-align:right;flex-shrink:0;min-width:80px}
+.dd{font-size:15px;font-weight:700}
+.dy{font-size:11px;margin-top:1px}
+
+/* ── WAITING cards ── */
+.wcard{border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;background:#080A0C;border:1px solid #0C0E14;opacity:0.55}
+.wo{color:#12141C;font-size:16px;min-width:22px;text-align:center}
+.wb{flex:1;min-width:0}
+.wi{color:#181C28;font-size:14px;font-weight:700}
+.wm{color:#111318;font-size:12px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wf{color:#0E1018;font-size:10px;margin-top:1px}
+.wdl{color:#111318;font-size:11px;flex-shrink:0;text-align:right;min-width:70px}
+
+/* divider between active and waiting */
+.divider{grid-column:1/-1;border-top:1px solid #0F1118;margin:2px 0;display:flex;align-items:center;gap:10px;padding:4px 0}
+.divider span{color:#141828;font-size:10px;letter-spacing:2px}
+
+#empty{grid-column:1/-1;text-align:center;padding:60px 0;color:#141828}
+#empty div:first-child{font-size:60px;margin-bottom:12px}
+#empty div:last-child{font-size:22px;letter-spacing:2px}
+
+#foot{padding:6px 24px;display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-shrink:0}
+.dot{width:7px;height:7px;border-radius:50%;background:#4FC9A4;box-shadow:0 0 8px #4FC9A4;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+#fl{color:#151A20;font-size:10px;letter-spacing:2px}
+</style>
+</head>
+<body>
+
+<div id="sw">
+  <span>ЭТАП:</span>
+  <button class="sb on" onclick="go('saw',this)">🪚 Распиловка</button>
+  <button class="sb" onclick="go('edge',this)">⚙️ Кантовка</button>
+  <button class="sb" onclick="go('cnc',this)">🤖 ЧПУ</button>
+  <button class="sb" onclick="go('paint',this)">🎨 Малярка</button>
+  <button class="sb" onclick="go('assembly',this)">🔧 Сборка</button>
+  <button class="sb" onclick="go('packaging',this)">📦 Упаковка</button>
+</div>
+
+<div id="hdr">
+  <div><div id="stitle"></div><div id="ssub">ОЧЕРЕДЬ ИЗДЕЛИЙ</div></div>
+  <div><div id="clock"></div><div id="xdate"></div></div>
+</div>
+
+<div id="grid"></div>
+
+<div id="foot"><div class="dot"></div><div id="fl">MEBEL PRO · LIVE</div></div>
+
+<script>
+var ST={
+  office:{l:'Офис',i:'📋'},
+  constructor:{l:'Конструктор',i:'📐'},
+  saw:{l:'Распиловка',i:'🪚'},
+  edge:{l:'Кантовка',i:'⚙️'},
+  cnc:{l:'ЧПУ',i:'🤖'},
+  paint_after_saw:{l:'Малярка',i:'🎨'},
+  paint_after_cnc:{l:'Малярка',i:'🎨'},
+  assembly:{l:'Сборка',i:'🔧'},
+  packaging:{l:'Упаковка',i:'📦'},
+  installer:{l:'Установка',i:'🏠'},
+  done:{l:'Готово',i:'✅'}
+};
+var SO=['office','constructor','saw','paint_after_saw','edge','cnc','paint_after_cnc','assembly','packaging','installer','done'];
+
+var OR=[
+  {id:'ORD-2026-001',title:'Кухонный гарнитур + шкаф-купе',client:'OÜ Kodu Design',dl:'2026-05-10',urg:true},
+  {id:'ORD-2026-002',title:'Офисные перегородки',client:'Тимур Берг',dl:'2026-05-20',urg:false},
+  {id:'ORD-2026-003',title:'Стеллажи — 12 секций',client:'AS Puidutöö',dl:'2026-05-05',urg:false},
+  {id:'ORD-2026-004',title:'Гардеробная система',client:'Елена Сидорова',dl:'2026-05-12',urg:false},
+  {id:'ORD-2026-005',title:'Детская мебель',client:'Семья Коваль',dl:'2026-05-03',urg:true}
+];
+
+var IT=[
+  {id:'i1', oid:'ORD-2026-001', name:'Кухонный гарнитур нижний', stage:'saw'},
+  {id:'i2', oid:'ORD-2026-001', name:'Шкаф-купе', stage:'saw'},
+  {id:'i3', oid:'ORD-2026-002', name:'Перегородка секция A', stage:'constructor'},
+  {id:'i4', oid:'ORD-2026-002', name:'Перегородка секция B', stage:'constructor'},
+  {id:'i5', oid:'ORD-2026-003', name:'Стеллаж секции 1–4', stage:'constructor'},
+  {id:'i6', oid:'ORD-2026-003', name:'Стеллаж секции 5–8', stage:'cnc'},
+  {id:'i7', oid:'ORD-2026-003', name:'Стеллаж секции 9–12', stage:'assembly'},
+  {id:'i8', oid:'ORD-2026-004', name:'Боковые секции', stage:'saw'},
+  {id:'i9', oid:'ORD-2026-004', name:'Штанги и полки', stage:'constructor'},
+  {id:'i10',oid:'ORD-2026-005', name:'Кровать детская', stage:'saw'},
+  {id:'i11',oid:'ORD-2026-005', name:'Шкаф детский', stage:'office'}
+];
+
+var cur='saw';
+
+function getO(id){
+  for(var i=0;i<OR.length;i++) if(OR[i].id===id) return OR[i];
+  return {title:'',client:'',dl:'',urg:false};
+}
+function days(d){return Math.ceil((new Date(d)-new Date())/86400000)}
+function isMine(it){
+  return cur==='paint'
+    ? (it.stage==='paint_after_saw'||it.stage==='paint_after_cnc')
+    : it.stage===cur;
+}
+function isComing(it){
+  if(it.stage==='done'||isMine(it)) return false;
+  var mi=SO.indexOf(cur==='paint'?'paint_after_saw':cur);
+  var ci=SO.indexOf(it.stage);
+  return mi>ci && mi!==-1;
+}
+
+function go(s,btn){
+  cur=s;
+  document.querySelectorAll('.sb').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  render();
+}
+
+function render(){
+  var sd=ST[cur]||{l:cur,i:'📺'};
+  document.getElementById('stitle').textContent=sd.i+' '+sd.l.toUpperCase();
+
+  var act=[],com=[];
+  IT.forEach(function(it){
+    var o=getO(it.oid);
+    if(isMine(it)) act.push({it:it,o:o});
+    else if(isComing(it)) com.push({it:it,o:o});
+  });
+
+  // Sort active: urgent by deadline first, then normal by deadline
+  act.sort(function(a,b){
+    if(a.o.urg!==b.o.urg) return (b.o.urg?1:0)-(a.o.urg?1:0);
+    return days(a.o.dl)-days(b.o.dl);
+  });
+  // Sort waiting by deadline
+  com.sort(function(a,b){ return days(a.o.dl)-days(b.o.dl); });
+
+  var grid=document.getElementById('grid');
+
+  if(act.length===0&&com.length===0){
+    grid.innerHTML='<div id="empty"><div>✓</div><div>НЕТ ИЗДЕЛИЙ</div></div>';
+    return;
+  }
+
+  // Build flat list: active items then waiting items
+  // Render in 2-column grid order (items flow left-right)
+  var items=[];
+  act.forEach(function(x,i){ items.push({type:'act',x:x,i:i,isFirst:i===0}); });
+  if(act.length>0&&com.length>0){
+    items.push({type:'div'});
+    // pad so divider starts on left column
+    if(items.length%2!==0) items.push({type:'pad'});
+    items.push({type:'div'});
+  }
+  com.forEach(function(x){ items.push({type:'com',x:x}); });
+
+  var h='';
+  items.forEach(function(item){
+    if(item.type==='div'){
+      h+='<div style="display:flex;align-items:center;gap:10px;padding:2px 0"><div style="flex:1;border-top:1px solid #0F1118"></div><span style="color:#141828;font-size:10px;letter-spacing:2px;white-space:nowrap">⏳ ОЖИДАЮТ</span><div style="flex:1;border-top:1px solid #0F1118"></div></div>';
+      return;
+    }
+    if(item.type==='pad'){
+      h+='<div></div>';
+      return;
+    }
+    if(item.type==='act'){
+      var it=item.x.it, o=item.x.o, i=item.i;
+      var d=days(o.dl);
+      var dc=d<0?'#FF4444':d<=3?'#FF8C00':'#4FC9A4';
+      var dt=d<0?'просрочено':d===0?'сегодня':d+' дн.';
+      var isUrg=o.urg;
+      var cls='card '+(isUrg?'urg':(item.isFirst?'nrm top':'nrm'));
+      var ac=isUrg?'#FF4444':item.isFirst?'#F7A84F':'#1F2235';
+      var num=isUrg?'⚡':(i===0?'▶':'#'+(i+1));
+      h+='<div class="'+cls+'">';
+      h+='<div class="ac" style="background:'+ac+'"></div>';
+      h+='<div class="cn">'+num+'</div>';
+      h+='<div class="cb">';
+      if(isUrg) h+='<div class="bu">⚡ СРОЧНО</div>';
+      h+='<div class="ci">'+o.id+'</div>';
+      h+='<div class="cm">'+it.name+'</div>';
+      h+='<div class="cs">'+o.title+'</div>';
+      h+='</div>';
+      h+='<div class="cd"><div class="dd" style="color:'+dc+'">'+o.dl+'</div><div class="dy" style="color:'+dc+'">'+dt+'</div></div>';
+      h+='</div>';
+      return;
+    }
+    if(item.type==='com'){
+      var it=item.x.it, o=item.x.o;
+      var from=ST[it.stage]||{i:'❓',l:it.stage};
+      var d=days(o.dl);
+      var dc=d<0?'#2A1010':d<=3?'#1A1408':'#0E1818';
+      h+='<div class="wcard">';
+      h+='<div class="wo">○</div>';
+      h+='<div class="wb">';
+      h+='<div class="wi">'+o.id+'</div>';
+      h+='<div class="wm">'+it.name+'</div>';
+      h+='<div class="wf">'+from.i+' '+from.l+'</div>';
+      h+='</div>';
+      h+='<div class="wdl" style="color:'+dc+'">'+o.dl+'</div>';
+      h+='</div>';
+    }
+  });
+
+  grid.innerHTML=h;
+}
+
+function tick(){
+  var n=new Date();
+  document.getElementById('clock').textContent=n.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('xdate').textContent=n.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
+}
+
+tick(); render(); setInterval(tick,1000);
+</script>
+</body>
+</html>

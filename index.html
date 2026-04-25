@@ -2,108 +2,119 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#080A0F;color:#fff;font-family:'Courier New',monospace}
+*{margin:0;padding:0}
+body{background:#080A0F;color:#fff;font-family:'Courier New',monospace;width:1280px;font-size:14px}
 
-#sw{background:#0D0F18;border-bottom:2px solid #1A1D27;padding:6px 12px;white-space:nowrap}
-.sb{background:#1A1D27;color:#555;border:none;border-radius:5px;padding:4px 10px;cursor:pointer;font-weight:700;font-size:11px;font-family:'Courier New',monospace;margin-right:4px}
+/* switcher */
+#sw{background:#0D0F18;border-bottom:2px solid #1A1D27;padding:8px 14px}
+#sw span{color:#444;font-size:13px;margin-right:8px}
+.sb{background:#1A1D27;color:#666;border:none;border-radius:6px;padding:5px 14px;cursor:pointer;font-weight:700;font-size:12px;font-family:'Courier New',monospace;margin-right:5px}
 .sb.on{background:#F7A84F;color:#000}
-#sw-lbl{color:#333;font-size:11px;margin-right:6px}
 
-#hdr{padding:12px 20px 10px;border-bottom:1px solid #0F1118;white-space:nowrap}
-#stitle{display:inline-block;color:#F7A84F;font-size:32px;font-weight:900;letter-spacing:3px;vertical-align:top}
-#ssub{color:#1A1D2A;font-size:10px;margin-top:3px;letter-spacing:2px}
-#clockbox{float:right;text-align:right}
-#clock{color:#fff;font-size:42px;font-weight:900;line-height:1}
-#xdate{color:#2A2D3A;font-size:10px;margin-top:2px}
-#hdr:after{content:'';display:table;clear:both}
+/* header */
+#hdr{width:100%;border-collapse:collapse;border-bottom:1px solid #0F1118}
+#hdr td{padding:14px 28px 10px;vertical-align:middle}
+#stitle{color:#F7A84F;font-size:44px;font-weight:900;letter-spacing:4px}
+#ssub{color:#1A1D2A;font-size:11px;letter-spacing:3px;margin-top:4px}
+#clock{color:#fff;font-size:56px;font-weight:900;text-align:right}
+#xdate{color:#2A2D3A;font-size:12px;text-align:right;margin-top:2px}
 
-#cols{padding:8px 12px}
-#col-L{float:left;width:49%;padding-right:6px;border-right:1px solid #141820}
-#col-R{float:right;width:49%;padding-left:6px}
-#cols:after{content:'';display:table;clear:both}
+/* two column layout */
+#layout{width:100%;border-collapse:collapse}
+#layout td.col{width:50%;vertical-align:top;padding:12px 16px}
+#layout td.col-r{border-left:1px solid #111418}
 
-.card{border-radius:9px;padding:10px 12px;margin-bottom:7px;position:relative;overflow:hidden}
-.card.urg{background:#130A0A;border:2px solid #FF4444}
-.card.top{background:#131720;border:1px solid #F7A84F33}
-.card.nrm{background:#0F1118;border:1px solid #1A1D27}
-.cacc{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:9px 0 0 9px}
-.crow{white-space:nowrap;overflow:hidden}
-.cnum{display:inline-block;width:22px;color:#1A1D27;font-size:16px;font-weight:900;vertical-align:top;padding-top:1px;padding-left:4px}
-.cbody{display:inline-block;vertical-align:top;max-width:calc(100% - 110px)}
-.bu{background:#FF444422;color:#FF4444;border:1px solid #FF444455;border-radius:3px;padding:1px 5px;font-size:9px;font-weight:900;letter-spacing:1px;display:block;margin-bottom:1px}
-.ci{color:#F7A84F;font-size:14px;font-weight:900;line-height:1.1}
-.cm{color:#fff;font-size:12px;font-weight:700;margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.cs{color:#2A2D3A;font-size:10px;margin-top:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.cdl{display:inline-block;vertical-align:top;text-align:right;float:right;padding-right:2px;padding-top:2px}
-.dd{font-size:12px;font-weight:700}
-.dy{font-size:10px;margin-top:1px}
+/* active card using table */
+.card{width:100%;border-collapse:collapse;margin-bottom:8px;border-radius:10px}
+.card td{padding:10px 12px;vertical-align:middle}
+.urg .card-wrap{background:#120909;border:2px solid #FF4444;border-radius:10px}
+.top .card-wrap{background:#111520;border:1px solid #252A3A;border-radius:10px}
+.nrm .card-wrap{background:#0C0E14;border:1px solid #141720;border-radius:10px}
+.card-wrap{margin-bottom:8px;padding:4px 0 10px}
+.acc{width:4px;padding:0;background:#ccc;border-radius:3px 0 0 3px}
+.cnum{width:36px;text-align:center;font-size:20px;color:#252830;font-weight:900;padding:8px 4px}
+.cmain{padding:6px 8px}
+.cdl{width:110px;text-align:right;padding:6px 12px 6px 4px;white-space:nowrap}
+.bu{background:#FF444422;color:#FF4444;border:1px solid #FF444466;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:900;display:inline-block;margin-bottom:3px}
+.ci{color:#F7A84F;font-size:19px;font-weight:900;line-height:1.2}
+.cm{color:#fff;font-size:15px;font-weight:700;margin-top:3px}
+.cs{color:#252A35;font-size:11px;margin-top:2px}
+.dd{font-size:15px;font-weight:700}
+.dy{font-size:11px;margin-top:2px}
 
-.divider{border-top:1px solid #0F1118;margin:4px 0 6px;padding-top:3px;color:#141828;font-size:9px;letter-spacing:2px}
+/* waiting card */
+.wcard-wrap{margin-bottom:7px;background:#0E1018;border:1px solid #1E2235;border-radius:8px;padding:8px 12px}
+.wcard{width:100%;border-collapse:collapse}
+.wcard td{vertical-align:middle;padding:2px 4px}
+.wo{width:24px;color:#2A3050;font-size:15px;text-align:center}
+.wmain{padding:0 6px}
+.wi{color:#3A4060;font-size:14px;font-weight:700}
+.wm{color:#2A3050;font-size:12px;margin-top:1px}
+.wf{color:#1E2438;font-size:10px;margin-top:1px}
+.wdl{width:90px;text-align:right;color:#2A3050;font-size:11px;white-space:nowrap}
 
-.wcard{border-radius:8px;padding:7px 10px;margin-bottom:6px;background:#080A0C;border:1px solid #0C0E14;opacity:0.55;overflow:hidden}
-.wrow{white-space:nowrap;overflow:hidden}
-.wo{display:inline-block;color:#12141C;font-size:13px;width:18px;vertical-align:top}
-.wbody{display:inline-block;vertical-align:top;max-width:calc(100% - 90px)}
-.wi{color:#181C28;font-size:12px;font-weight:700}
-.wm{color:#111318;font-size:10px;margin-top:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.wf{color:#0E1018;font-size:9px;margin-top:1px}
-.wdl{display:inline-block;vertical-align:top;float:right;color:#111318;font-size:10px;text-align:right;padding-right:2px}
+.divider{border-top:1px solid #2A2D3A;margin:4px 0 8px;padding-top:6px;color:#3A4060;font-size:10px;letter-spacing:2px}
 
-#foot{padding:5px 20px;text-align:right;clear:both}
+#foot{text-align:right;padding:4px 20px}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#4FC9A4;margin-right:5px;vertical-align:middle}
+#fl{color:#151A20;font-size:10px;letter-spacing:2px;vertical-align:middle}
 </style>
 </head>
 <body>
 
 <div id="sw">
-  <span id="sw-lbl">ЭТАП:</span>
-  <button class="sb on" onclick="go('saw',this)">🪚 Распиловка</button>
-  <button class="sb" onclick="go('edge',this)">⚙️ Кантовка</button>
-  <button class="sb" onclick="go('cnc',this)">🤖 ЧПУ</button>
-  <button class="sb" onclick="go('paint',this)">🎨 Малярка</button>
-  <button class="sb" onclick="go('assembly',this)">🔧 Сборка</button>
-  <button class="sb" onclick="go('packaging',this)">📦 Упаковка</button>
+  <span>ЭТАП:</span>
+  <button class="sb on" onclick="go('saw',this)">Распиловка</button>
+  <button class="sb" onclick="go('edge',this)">Кантовка</button>
+  <button class="sb" onclick="go('cnc',this)">ЧПУ</button>
+  <button class="sb" onclick="go('paint',this)">Малярка</button>
+  <button class="sb" onclick="go('assembly',this)">Сборка</button>
+  <button class="sb" onclick="go('packaging',this)">Упаковка</button>
 </div>
 
-<div id="hdr">
-  <div id="clockbox"><div id="clock"></div><div id="xdate"></div></div>
-  <div id="stitle"></div>
-  <div id="ssub">ОЧЕРЕДЬ ИЗДЕЛИЙ</div>
-</div>
+<table id="hdr" width="100%">
+<tr>
+  <td><div id="stitle"></div><div id="ssub">ОЧЕРЕДЬ ИЗДЕЛИЙ</div></td>
+  <td align="right"><div id="clock"></div><div id="xdate"></div></td>
+</tr>
+</table>
 
-<div id="cols">
-  <div id="col-L"></div>
-  <div id="col-R"></div>
-</div>
+<table id="layout" width="100%">
+<tr>
+  <td class="col" id="col-left" width="50%"></td>
+  <td class="col col-r" id="col-right" width="50%"></td>
+</tr>
+</table>
 
-<div id="foot"><span style="display:inline-block;width:6px;height:6px;border-radius:3px;background:#4FC9A4;margin-right:5px;vertical-align:middle"></span><span style="color:#151A20;font-size:9px;letter-spacing:2px;vertical-align:middle">MEBEL PRO · LIVE</span></div>
+<div id="foot"><span class="dot"></span><span id="fl">MEBEL PRO · LIVE</span></div>
 
 <script>
-var ST={office:{l:'Офис',i:'📋'},constructor:{l:'Конструктор',i:'📐'},saw:{l:'Распиловка',i:'🪚'},edge:{l:'Кантовка',i:'⚙️'},cnc:{l:'ЧПУ',i:'🤖'},paint_after_saw:{l:'Малярка',i:'🎨'},paint_after_cnc:{l:'Малярка',i:'🎨'},assembly:{l:'Сборка',i:'🔧'},packaging:{l:'Упаковка',i:'📦'},installer:{l:'Установка',i:'🏠'},done:{l:'Готово',i:'✅'}};
+var ST={office:{l:'Офис'},constructor:{l:'Конструктор'},saw:{l:'Распиловка'},edge:{l:'Кантовка'},cnc:{l:'ЧПУ'},paint_after_saw:{l:'Малярка'},paint_after_cnc:{l:'Малярка'},assembly:{l:'Сборка'},packaging:{l:'Упаковка'},installer:{l:'Установка'},done:{l:'Готово'}};
 var SO=['office','constructor','saw','paint_after_saw','edge','cnc','paint_after_cnc','assembly','packaging','installer','done'];
 var OR=[
-  {id:'ORD-2026-001',title:'Кухонный гарнитур + шкаф-купе',client:'OÜ Kodu Design',dl:'2026-05-10',urg:true},
-  {id:'ORD-2026-002',title:'Офисные перегородки',client:'Тимур Берг',dl:'2026-05-20',urg:false},
-  {id:'ORD-2026-003',title:'Стеллажи — 12 секций',client:'AS Puidutöö',dl:'2026-05-05',urg:false},
-  {id:'ORD-2026-004',title:'Гардеробная система',client:'Елена Сидорова',dl:'2026-05-12',urg:false},
-  {id:'ORD-2026-005',title:'Детская мебель',client:'Семья Коваль',dl:'2026-05-03',urg:true}
+  {id:'ORD-2026-001',title:'Кухонный гарнитур + шкаф-купе',dl:'2026-05-10',urg:true},
+  {id:'ORD-2026-002',title:'Офисные перегородки',dl:'2026-05-20',urg:false},
+  {id:'ORD-2026-003',title:'Стеллажи 12 секций',dl:'2026-05-05',urg:false},
+  {id:'ORD-2026-004',title:'Гардеробная система',dl:'2026-05-12',urg:false},
+  {id:'ORD-2026-005',title:'Детская мебель',dl:'2026-05-03',urg:true}
 ];
 var IT=[
   {id:'i1',oid:'ORD-2026-001',name:'Кухонный гарнитур нижний',stage:'saw'},
   {id:'i2',oid:'ORD-2026-001',name:'Шкаф-купе',stage:'saw'},
   {id:'i3',oid:'ORD-2026-002',name:'Перегородка секция A',stage:'constructor'},
   {id:'i4',oid:'ORD-2026-002',name:'Перегородка секция B',stage:'constructor'},
-  {id:'i5',oid:'ORD-2026-003',name:'Стеллаж секции 1–4',stage:'constructor'},
-  {id:'i6',oid:'ORD-2026-003',name:'Стеллаж секции 5–8',stage:'cnc'},
-  {id:'i7',oid:'ORD-2026-003',name:'Стеллаж секции 9–12',stage:'assembly'},
+  {id:'i5',oid:'ORD-2026-003',name:'Стеллаж секции 1-4',stage:'constructor'},
+  {id:'i6',oid:'ORD-2026-003',name:'Стеллаж секции 5-8',stage:'cnc'},
+  {id:'i7',oid:'ORD-2026-003',name:'Стеллаж секции 9-12',stage:'assembly'},
   {id:'i8',oid:'ORD-2026-004',name:'Боковые секции',stage:'saw'},
   {id:'i9',oid:'ORD-2026-004',name:'Штанги и полки',stage:'constructor'},
   {id:'i10',oid:'ORD-2026-005',name:'Кровать детская',stage:'saw'},
   {id:'i11',oid:'ORD-2026-005',name:'Шкаф детский',stage:'office'}
 ];
 var cur='saw';
-function getO(id){for(var i=0;i<OR.length;i++)if(OR[i].id===id)return OR[i];return{title:'',client:'',dl:'',urg:false}}
+function getO(id){for(var i=0;i<OR.length;i++)if(OR[i].id===id)return OR[i];return{title:'',dl:'',urg:false}}
 function days(d){return Math.ceil((new Date(d)-new Date())/86400000)}
 function isMine(it){return cur==='paint'?(it.stage==='paint_after_saw'||it.stage==='paint_after_cnc'):it.stage===cur}
 function isComing(it){if(it.stage==='done'||isMine(it))return false;var mi=SO.indexOf(cur==='paint'?'paint_after_saw':cur),ci=SO.indexOf(it.stage);return mi>ci&&mi!==-1}
@@ -111,51 +122,48 @@ function go(s,btn){cur=s;var bs=document.querySelectorAll('.sb');for(var i=0;i<b
 
 function cardH(it,o,idx,isFirst){
   var d=days(o.dl),dc=d<0?'#FF4444':d<=3?'#FF8C00':'#4FC9A4',dt=d<0?'просрочено':d===0?'сегодня':d+' дн.';
-  var ac=o.urg?'#FF4444':isFirst?'#F7A84F':'#1F2235';
-  var cls='card '+(o.urg?'urg':isFirst?'top':'nrm');
-  var num=o.urg?'⚡':(idx===0?'▶':'#'+(idx+1));
-  return '<div class="'+cls+'">'
-    +'<div class="cacc" style="background:'+ac+'"></div>'
-    +'<div class="crow">'
-    +'<div class="cdl"><div class="dd" style="color:'+dc+'">'+o.dl+'</div><div class="dy" style="color:'+dc+'">'+dt+'</div></div>'
-    +'<div class="cnum">'+num+'</div>'
-    +'<div class="cbody">'+(o.urg?'<div class="bu">⚡ СРОЧНО</div>':'')+'<div class="ci">'+o.id+'</div><div class="cm">'+it.name+'</div><div class="cs">'+o.title+'</div></div>'
-    +'</div></div>';
+  var ac=o.urg?'#FF4444':isFirst?'#F7A84F':'#1A1F2E';
+  var cls=o.urg?'urg':isFirst?'top':'nrm';
+  var num=o.urg?'!':(idx===0?'>':'#'+(idx+1));
+  return '<div class="'+cls+'"><div class="card-wrap"><table class="card" width="100%"><tr>'
+    +'<td class="acc" style="background:'+ac+'" width="4">&nbsp;</td>'
+    +'<td class="cnum">'+num+'</td>'
+    +'<td class="cmain">'+(o.urg?'<div class="bu">СРОЧНО</div>':'')+'<div class="ci">'+o.id+'</div><div class="cm">'+it.name+'</div><div class="cs">'+o.title+'</div></td>'
+    +'<td class="cdl"><div class="dd" style="color:'+dc+'">'+o.dl+'</div><div class="dy" style="color:'+dc+'">'+dt+'</div></td>'
+    +'</tr></table></div></div>';
 }
 
 function wCardH(it,o){
-  var from=ST[it.stage]||{i:'❓',l:it.stage};
-  return '<div class="wcard">'
-    +'<div class="wrow">'
-    +'<div class="wdl">'+o.dl+'</div>'
-    +'<div class="wo">○</div>'
-    +'<div class="wbody"><div class="wi">'+o.id+'</div><div class="wm">'+it.name+'</div><div class="wf">'+from.i+' '+from.l+'</div></div>'
-    +'</div></div>';
+  var from=ST[it.stage]||{l:it.stage};
+  return '<div class="wcard-wrap"><table class="wcard" width="100%"><tr>'
+    +'<td class="wo">o</td>'
+    +'<td class="wmain"><div class="wi">'+o.id+'</div><div class="wm">'+it.name+'</div><div class="wf">'+from.l+'</div></td>'
+    +'<td class="wdl">'+o.dl+'</td>'
+    +'</tr></table></div>';
 }
 
 function render(){
-  var sd=ST[cur]||{l:cur,i:'📺'};
-  document.getElementById('stitle').innerHTML=sd.i+' '+sd.l.toUpperCase();
+  var sd=ST[cur]||{l:cur};
+  document.getElementById('stitle').innerHTML=sd.l.toUpperCase();
   var act=[],com=[];
   for(var i=0;i<IT.length;i++){var it=IT[i],o=getO(it.oid);if(isMine(it))act.push({it:it,o:o});else if(isComing(it))com.push({it:it,o:o});}
   act.sort(function(a,b){if(a.o.urg!==b.o.urg)return(b.o.urg?1:0)-(a.o.urg?1:0);return days(a.o.dl)-days(b.o.dl)});
   com.sort(function(a,b){return days(a.o.dl)-days(b.o.dl)});
   var all=[];
-  for(var i=0;i<act.length;i++)all.push({type:'act',it:act[i].it,o:act[i].o,idx:i,first:i===0});
-  if(com.length>0)all.push({type:'div'});
-  for(var i=0;i<com.length;i++)all.push({type:'com',it:com[i].it,o:com[i].o});
-  var half=Math.ceil(all.length/2);
-  var L='',R='';
+  for(var i=0;i<act.length;i++)all.push({t:'a',it:act[i].it,o:act[i].o,idx:i,first:i===0});
+  if(act.length>0&&com.length>0)all.push({t:'d'});
+  for(var i=0;i<com.length;i++)all.push({t:'c',it:com[i].it,o:com[i].o});
+  var half=Math.ceil(all.length/2),L='',R='';
   for(var i=0;i<all.length;i++){
     var item=all[i],h='';
-    if(item.type==='act') h=cardH(item.it,item.o,item.idx,item.first);
-    else if(item.type==='div') h='<div class="divider">⏳ ОЖИДАЮТ</div>';
-    else if(item.type==='com') h=wCardH(item.it,item.o);
-    if(i<half) L+=h; else R+=h;
+    if(item.t==='a')h=cardH(item.it,item.o,item.idx,item.first);
+    else if(item.t==='d')h='<div class="divider">ОЖИДАЮТ</div>';
+    else h=wCardH(item.it,item.o);
+    if(i<half)L+=h;else R+=h;
   }
-  if(all.length===0){L='<div style="color:#1E2235;padding:40px 0;font-size:18px;text-align:center">✓ НЕТ ИЗДЕЛИЙ</div>';R='';}
-  document.getElementById('col-L').innerHTML=L;
-  document.getElementById('col-R').innerHTML=R;
+  if(all.length===0)L='<div style="color:#1E2235;text-align:center;padding:60px;font-size:18px">НЕТ ИЗДЕЛИЙ</div>';
+  document.getElementById('col-left').innerHTML=L;
+  document.getElementById('col-right').innerHTML=R;
 }
 
 function tick(){
